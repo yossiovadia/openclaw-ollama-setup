@@ -118,7 +118,7 @@ Add this to `~/.openclaw/workspace/TOOLS.md` to make your Ollama model delegate 
 **YOU MUST DELEGATE ALL CODING TASKS TO CLAUDE CODE. DO NOT WRITE CODE YOURSELF.**
 
 When a user asks to write, fix, or modify code, ALWAYS execute:
-  bash pty:true workdir:<project-dir> background:true command:"claude '<task description>'"
+  bash workdir:<project-dir> command:"claude -p --dangerously-skip-permissions '<task description>'"
 
 All projects MUST be created in your projects directory (e.g. /home/user/code/),
 NEVER in the workspace directory.
@@ -142,7 +142,7 @@ If it involves WRITING or MODIFYING code -> DELEGATE TO CLAUDE CODE.
 
 When coding, specify the project directory per-task:
 ```bash
-bash pty:true workdir:~/code/myproject background:true command:"claude 'Fix the bug'"
+bash workdir:~/code/myproject command:"claude -p --dangerously-skip-permissions 'Fix the bug'"
 ```
 
 ## Enterprise Claude Code (Vertex AI / AWS Bedrock)
@@ -307,8 +307,9 @@ ollama show <model-name> --modelfile | grep num_ctx
 | Claude Code "Not logged in" from OpenClaw | Add enterprise env vars to launchd plist (see above) |
 | Agent creates files in workspace instead of project dir | Update TOOLS.md with explicit project directory path |
 | `bash pty:true` fails with "No such file or directory" | That's OpenClaw tool syntax, not shell syntax - model needs to use it as a tool call |
-| Claude Code hangs and never exits | Use `background:true` - without it, `claude 'prompt'` opens interactive mode forever |
-| Need text answer, not file changes | Use `claude -p "question"` (print mode) instead of interactive mode |
+| Claude Code hangs and never exits | Always use `-p` flag: `claude -p "task"` exits when done, `claude "task"` hangs forever |
+| Claude Code exits but doesn't write files | Add `--dangerously-skip-permissions` so it can approve its own file edits |
+| Need text answer, not file changes | Use `claude -p "question"` (no skip-permissions needed for read-only) |
 
 ## Troubleshooting
 
