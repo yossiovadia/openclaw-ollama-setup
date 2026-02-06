@@ -84,7 +84,7 @@ Under `tools.byProvider`, add:
   "tools": {
     "byProvider": {
       "ollama/<MODEL_NAME>": {
-        "allow": []
+        "allow": ["*"]
       }
     }
   }

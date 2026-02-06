@@ -173,7 +173,7 @@ EOF
        '
        .models.providers.ollama = $provider |
        .agents.defaults.model.primary = $model |
-       .tools.byProvider[$model] = {"allow": []}
+       .tools.byProvider[$model] = {"allow": ["*"]}
        ' "$OPENCLAW_CONFIG" > "$OPENCLAW_CONFIG.tmp" && mv "$OPENCLAW_CONFIG.tmp" "$OPENCLAW_CONFIG"
 
     echo -e "${GREEN}✓${NC} OpenClaw config updated"
