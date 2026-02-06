@@ -221,7 +221,7 @@ This is a strict requirement. When a user asks you to:
 **ALWAYS execute this command:**
 
 \`\`\`bash
-bash pty:true workdir:<project-dir> command:"claude '<detailed task description>'"
+bash pty:true workdir:<project-dir> background:true command:"claude '<task>'"
 \`\`\`
 
 ### Why This Rule Exists
