@@ -102,26 +102,40 @@ openclaw gateway restart
 If you have Claude Code CLI installed and want coding tasks delegated to it, add this to `~/.openclaw/workspace/TOOLS.md`:
 
 ```markdown
-## Coding Tasks → Claude Code CLI
+## ⚠️ MANDATORY: All Coding Tasks → Claude Code CLI
 
-For any coding-related requests (writing code, debugging, refactoring, code review, fixing bugs, building features), **delegate to Claude Code CLI** using the coding-agent skill:
+**YOU MUST DELEGATE ALL CODING TASKS TO CLAUDE CODE. DO NOT WRITE CODE YOURSELF.**
+
+This is a strict requirement. When a user asks you to:
+- Write, create, or generate code
+- Fix bugs or debug issues
+- Refactor or modify existing code
+- Build features or applications
+- Review code or PRs
+- Create scripts, programs, or any programming work
+
+**ALWAYS execute this command:**
 
 \`\`\`bash
-bash pty:true workdir:<project-dir> command:"claude '<task description>'"
+bash pty:true workdir:<project-dir> command:"claude '<detailed task description>'"
 \`\`\`
 
-**When to use Claude Code:**
-- User asks to write, fix, or modify code
-- User asks to debug or troubleshoot code issues
-- User asks to review code or a PR
-- User asks to build/create something that involves programming
-- User mentions a specific project directory
+### Why This Rule Exists
 
-**Default project directory:** `~/code` (ask if unclear)
+Claude Code CLI is a specialized coding agent with superior code generation capabilities.
+You are the orchestrator - your job is to delegate coding work, not do it yourself.
 
-**Do NOT use Claude Code for:**
-- General questions, research, or conversation
-- Tasks that don't involve actual code changes
+### Default Directory
+
+If no project directory is specified, use `~/code` or ask the user.
+
+### What You CAN Do Yourself
+
+- Answer questions about code (explaining, discussing)
+- Run existing scripts, git commands, file operations
+- General research and conversation
+
+**But if it involves WRITING or MODIFYING code → DELEGATE TO CLAUDE CODE.**
 ```
 
 ## Ollama Tips
