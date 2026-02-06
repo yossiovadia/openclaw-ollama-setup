@@ -59,7 +59,21 @@ Edit `~/.openclaw/openclaw.json` and add your Ollama provider under `models.prov
 }
 ```
 
-### 2. Set Default Model
+### 2. Set Workspace Directory (Important!)
+
+Set `agents.defaults.workspace` to your projects folder so coding agents work in the right location:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "workspace": "/Users/yourname/code"
+    }
+  }
+}
+```
+
+### 3. Set Default Model
 
 In the same file, set the primary model under `agents.defaults.model`:
 

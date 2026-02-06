@@ -132,6 +132,26 @@ configure_tokens() {
     MAX_TOKENS=${MAX_TOKENS:-16384}
 }
 
+# Configure workspace directory
+configure_workspace() {
+    echo ""
+    echo -e "${YELLOW}Configuring workspace directory...${NC}"
+    echo "This is where coding agents will work. Set it to your projects folder."
+    read -p "Enter workspace directory [$HOME/code]: " WORKSPACE_DIR
+    WORKSPACE_DIR=${WORKSPACE_DIR:-"$HOME/code"}
+
+    # Expand ~ if present
+    WORKSPACE_DIR="${WORKSPACE_DIR/#\~/$HOME}"
+
+    if [ ! -d "$WORKSPACE_DIR" ]; then
+        read -p "Directory doesn't exist. Create it? [Y/n]: " create_dir
+        if [[ ! "$create_dir" =~ ^[Nn] ]]; then
+            mkdir -p "$WORKSPACE_DIR"
+            echo -e "${GREEN}✓${NC} Created $WORKSPACE_DIR"
+        fi
+    fi
+}
+
 # Backup and update config
 update_openclaw_config() {
     echo ""
@@ -170,8 +190,10 @@ EOF
     # Update config using jq
     jq --argjson provider "$PROVIDER_JSON" \
        --arg model "ollama/$MODEL_NAME" \
+       --arg workspace "$WORKSPACE_DIR" \
        '
        .models.providers.ollama = $provider |
+       .agents.defaults.workspace = $workspace |
        .agents.defaults.model.primary = $model |
        .tools.byProvider[$model] = {"allow": ["*"]}
        ' "$OPENCLAW_CONFIG" > "$OPENCLAW_CONFIG.tmp" && mv "$OPENCLAW_CONFIG.tmp" "$OPENCLAW_CONFIG"
@@ -268,6 +290,7 @@ print_summary() {
     echo "  Model: ollama/$MODEL_NAME"
     echo "  Context window: $CONTEXT_WINDOW"
     echo "  Max tokens: $MAX_TOKENS"
+    echo "  Workspace: $WORKSPACE_DIR"
     if [ "$CLAUDE_AVAILABLE" = "true" ]; then
         echo "  Claude Code: Enabled for coding tasks"
     fi
@@ -286,6 +309,7 @@ main() {
     get_ollama_endpoint
     select_model
     configure_tokens
+    configure_workspace
     update_openclaw_config
     setup_claude_routing
     restart_gateway
